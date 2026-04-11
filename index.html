@@ -15,12 +15,12 @@
   }
   .card-shadow { box-shadow: 0 20px 50px rgba(139,111,71,0.15); }
   .spinner {
-    width: 36px; height: 36px;
+    width: 40px; height: 40px;
     border: 3px solid #e8ddd0;
-    border-top-color: #7c5cbf;
+    border-top-color: #8b6f47;
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
-    margin: 0 auto 12px;
+    margin: 0 auto 16px;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 </style>
@@ -37,69 +37,101 @@
   <div id="view-form" class="max-w-xl mx-auto bg-white p-8 rounded-[2.5rem] shadow-sm border border-stone-100">
     <h2 class="text-2xl font-bold mb-8 text-center text-[#4a3b2a]">הוסיפו את עצמכם לקהילה — יצירת כרטיס ביקור</h2>
     <div class="space-y-5">
+
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <input id="in-name" type="text" placeholder="שם מלא *" class="w-full p-4 bg-stone-50 rounded-2xl outline-none focus:ring-2 ring-[#7c5cbf]/20 border border-transparent focus:border-[#7c5cbf]/30">
-        <input id="in-role" type="text" placeholder="רקע מקצועי *" class="w-full p-4 bg-stone-50 rounded-2xl outline-none focus:ring-2 ring-[#7c5cbf]/20 border border-transparent focus:border-[#7c5cbf]/30">
+        <input id="in-name" type="text" placeholder="שם מלא *"
+          class="w-full p-4 bg-stone-50 rounded-2xl outline-none focus:ring-2 ring-[#8b6f47]/20">
+        <input id="in-role" type="text" placeholder="רקע מקצועי *"
+          class="w-full p-4 bg-stone-50 rounded-2xl outline-none focus:ring-2 ring-[#8b6f47]/20">
       </div>
-      <textarea id="in-bio" placeholder="רקע טיפולי" class="w-full p-4 bg-stone-50 rounded-2xl h-32 outline-none focus:ring-2 ring-[#7c5cbf]/20 resize-none border border-transparent focus:border-[#7c5cbf]/30"></textarea>
+
+      <textarea id="in-bio" placeholder="רקע טיפולי"
+        class="w-full p-4 bg-stone-50 rounded-2xl h-28 outline-none focus:ring-2 ring-[#8b6f47]/20 resize-none"></textarea>
+
+      <div>
+        <label class="block text-sm font-semibold text-stone-500 mb-2">תאר את הטיפול שלך לתמונה (בעברית) *</label>
+        <textarea id="in-image-desc" placeholder="למשל: מטפלת מעסה גב של מטופלת על שולחן עיסוי, אווירה רגועה ומקצועית, תאורה חמה..."
+          class="w-full p-4 bg-stone-50 rounded-2xl h-28 outline-none focus:ring-2 ring-[#8b6f47]/20 resize-none"></textarea>
+        <p class="text-xs text-stone-400 mt-1">התיאור יתורגם לאנגלית אוטומטית לפני יצירת התמונה</p>
+      </div>
+
       <div class="grid grid-cols-2 gap-4">
-        <input id="in-phone" type="text" placeholder="טלפון" dir="ltr" class="w-full p-4 bg-stone-50 rounded-2xl outline-none focus:ring-2 ring-[#7c5cbf]/20">
-        <input id="in-loc" type="text" placeholder="עיר / מיקום" class="w-full p-4 bg-stone-50 rounded-2xl outline-none focus:ring-2 ring-[#7c5cbf]/20">
+        <input id="in-phone" type="text" placeholder="טלפון" dir="ltr"
+          class="w-full p-4 bg-stone-50 rounded-2xl outline-none focus:ring-2 ring-[#8b6f47]/20">
+        <input id="in-loc" type="text" placeholder="עיר / מיקום"
+          class="w-full p-4 bg-stone-50 rounded-2xl outline-none focus:ring-2 ring-[#8b6f47]/20">
       </div>
+
       <p id="form-err" class="text-red-400 text-sm text-center hidden"></p>
+
       <div class="flex justify-center">
-        <button onclick="submitForm()" id="btn-submit" class="px-10 py-3 rounded-2xl font-bold shadow-md hover:brightness-110 transition-all text-base text-white" style="background:#8b6f47">
+        <button id="btn-submit" onclick="submitForm()"
+          class="px-10 py-3 rounded-2xl font-bold shadow-md hover:brightness-110 transition-all text-base text-white"
+          style="background:#8b6f47">
           הצטרפות לקהילה
         </button>
       </div>
+
     </div>
   </div>
 
   <!-- LOADING -->
-  <div id="view-loading" style="display:none" class="flex flex-col items-center justify-center py-24">
-    <div class="spinner"></div>
-    <p class="text-[#7c5cbf] font-semibold text-lg mb-2">Gemini מציירת עבורך...</p>
-    <p class="text-stone-400 text-sm">זה לוקח כ-10 שניות</p>
+  <div id="view-loading" style="display:none;">
+    <div class="flex flex-col items-center justify-center py-24">
+      <div class="spinner"></div>
+      <p class="text-[#8b6f47] font-semibold text-lg mb-2">מייצר את האיור שלך...</p>
+      <p class="text-stone-400 text-sm">זה לוקח כ-10 שניות</p>
+    </div>
   </div>
 
   <!-- PREVIEW -->
-  <div id="view-preview" style="display:none" class="flex flex-col items-center">
-    <div id="card-capture" class="w-full max-w-2xl bg-[#fdfaf6] rounded-3xl overflow-hidden flex relative border border-stone-200 card-shadow" style="aspect-ratio:1.75">
-      <div class="flex-[1.2] relative overflow-hidden bg-white">
-        <img id="card-img" class="w-full h-full object-cover watercolor-blend" src="" alt="">
-      </div>
-      <div class="flex-1 flex flex-col justify-center p-8 z-10 text-[#2a2118]">
-        <h2 id="out-name" class="text-3xl font-bold mb-1"></h2>
-        <p id="out-role" class="text-sm font-bold uppercase tracking-widest mb-5 text-[#7c5cbf]"></p>
-        <div class="w-10 h-1 mb-6 rounded" style="background:#7c5cbf"></div>
-        <div class="space-y-2 text-xs font-semibold opacity-70">
-          <div id="out-phone"></div>
-          <div id="out-loc"></div>
+  <div id="view-preview" style="display:none;">
+    <div class="flex flex-col items-center">
+
+      <div id="card-capture"
+        class="w-full max-w-2xl bg-[#fdfaf6] rounded-3xl overflow-hidden flex relative border border-stone-200 card-shadow"
+        style="aspect-ratio:1.75">
+        <div class="flex-[1.2] relative overflow-hidden bg-white">
+          <img id="card-img" class="w-full h-full object-cover watercolor-blend" src="" alt="">
+        </div>
+        <div class="flex-1 flex flex-col justify-center p-8 z-10 text-[#2a2118]">
+          <h2 id="out-name" class="text-3xl font-bold mb-1"></h2>
+          <p id="out-role" class="text-sm font-bold uppercase tracking-widest mb-5 text-[#8b6f47]"></p>
+          <div class="w-10 h-1 mb-6 rounded bg-[#8b6f47]"></div>
+          <div class="space-y-2 text-xs font-semibold opacity-70">
+            <div id="out-phone"></div>
+            <div id="out-loc"></div>
+          </div>
         </div>
       </div>
-    </div>
-    <p id="preview-err" class="text-red-400 text-sm mt-4 hidden"></p>
-    <div class="mt-8 flex gap-4 w-full max-w-md">
-      <button onclick="downloadImage()" class="flex-1 text-white py-4 rounded-xl font-bold shadow-md hover:brightness-110 transition-all" style="background:#7c5cbf">שמור תמונה</button>
-      <button onclick="backToForm()" class="flex-1 bg-white py-4 rounded-xl font-bold border-2 hover:bg-stone-50 transition-all" style="color:#7c5cbf;border-color:#7c5cbf">מלא שוב</button>
+
+      <p id="preview-err" class="text-red-400 text-sm mt-4 hidden"></p>
+
+      <div class="mt-8 flex gap-4 w-full max-w-md">
+        <button onclick="downloadImage()"
+          class="flex-1 text-white py-4 rounded-xl font-bold shadow-md hover:brightness-110 transition-all"
+          style="background:#8b6f47">
+          💾 שמור תמונה
+        </button>
+        <button onclick="backToForm()"
+          class="flex-1 bg-white py-4 rounded-xl font-bold border-2 hover:bg-stone-50 transition-all"
+          style="color:#8b6f47; border-color:#8b6f47">
+          ← מלא שוב
+        </button>
+      </div>
+
     </div>
   </div>
 
 </div>
 <script>
-const API_KEY = "AIzaSyD1oIXHdYMA2gGVrRghMnCq46DZpnoBAMk";
 const SHEET_URL = "https://script.google.com/macros/s/AKfycby6m6V5HLlsoHAGpHAnhWY1Edm4M5DWnIscEgyupSOTQgAJPS44c3Dl4Z3WC3u-Vm13UA/exec";
-const MODEL = "gemini-2.5-flash-image";
 
 function show(id) {
   ["view-form","view-loading","view-preview"].forEach(v => {
-    const el = document.getElementById(v);
-    el.style.display = "none";
-    el.classList.remove("flex");
+    document.getElementById(v).style.display = "none";
   });
-  const target = document.getElementById(id);
-  target.style.display = (id === "view-form") ? "block" : "flex";
-  if (id !== "view-form") target.classList.add("flex");
+  document.getElementById(id).style.display = "block";
 }
 
 function backToForm() {
@@ -107,14 +139,13 @@ function backToForm() {
 }
 
 async function submitForm() {
-  const name  = document.getElementById("in-name").value.trim();
-  const role  = document.getElementById("in-role").value.trim();
-  const bio   = document.getElementById("in-bio").value.trim();
-  const phone = document.getElementById("in-phone").value.trim();
-  const loc   = document.getElementById("in-loc").value.trim();
-  const errEl = document.getElementById("form-err");
-
+  const name      = document.getElementById("in-name").value.trim();
+  const role      = document.getElementById("in-role").value.trim();
+  const bio       = document.getElementById("in-bio").value.trim();
   const imageDesc = document.getElementById("in-image-desc").value.trim();
+  const phone     = document.getElementById("in-phone").value.trim();
+  const loc       = document.getElementById("in-loc").value.trim();
+  const errEl     = document.getElementById("form-err");
 
   if (!name || !role) {
     errEl.textContent = "נא למלא שם מלא ורקע מקצועי";
@@ -124,34 +155,28 @@ async function submitForm() {
   errEl.classList.add("hidden");
   show("view-loading");
 
-  // Translate Hebrew description to English using Claude API
-  let englishDesc = imageDesc || `${role} therapist performing a treatment, professional watercolor style, serene healing atmosphere`;
+  // Translate Hebrew to English using MyMemory (free, no key needed)
+  let englishDesc = `${role} therapist treatment, minimalist watercolor style`;
   if (imageDesc) {
     try {
-      const translateRes = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
-          max_tokens: 300,
-          messages: [{
-            role: "user",
-            content: `Translate this Hebrew text to English for an image generation prompt. Return ONLY the English translation, nothing else: "${imageDesc}"`
-          }]
-        })
-      });
-      const translateData = await translateRes.json();
-      englishDesc = translateData.content?.[0]?.text || englishDesc;
+      const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(imageDesc)}&langpair=he|en`);
+      const data = await res.json();
+      if (data.responseStatus === 200) {
+        englishDesc = data.responseData.translatedText;
+      }
     } catch(e) {
-      // fallback to original if translation fails
+      // fallback to default
     }
   }
 
-  const prompt = `Minimalist watercolor illustration for a business card. ${englishDesc}. Style: simple clean watercolor painting, soft pastel colors only, white background, delicate brush strokes, no text, no borders, elegant and professional, suitable for a business card.`;
+  // Generate image via Pollinations flux-schnell
+  const prompt = `Minimalist watercolor illustration for a business card. ${englishDesc}. Style: simple clean watercolor painting, soft pastel colors only, white background, delicate brush strokes, no text, no borders, elegant and professional.`;
+  const imgUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=800&height=600&model=flux-schnell&nologo=true&seed=${Date.now()}`;
 
-  try {
-    const encodedPrompt = encodeURIComponent(prompt);
-    const imgUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=800&height=600&model=flux-schnell&nologo=true&seed=${Date.now()}`;
+  // Preload image
+  const img = new Image();
+  img.crossOrigin = "anonymous";
+  img.onload = () => {
     document.getElementById("card-img").src = imgUrl;
     document.getElementById("out-name").textContent = name;
     document.getElementById("out-role").textContent = role;
@@ -159,28 +184,32 @@ async function submitForm() {
     document.getElementById("out-loc").textContent   = loc   ? "📍 " + loc   : "";
     document.getElementById("preview-err").classList.add("hidden");
 
-    // Save to Google Sheets
+    // Save to Google Sheets (silent)
     fetch(SHEET_URL, {
       method: "POST",
-      body: JSON.stringify({ name, role, bio, phone, loc }),
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, role, bio, phone, loc })
     }).catch(() => {});
 
     show("view-preview");
-
-  } catch(err) {
-    show("view-form");
-    errEl.textContent = "שגיאה: " + err.message;
-    errEl.classList.remove("hidden");
-  }
+  };
+  img.onerror = () => {
+    document.getElementById("preview-err").textContent = "שגיאה בטעינת התמונה — נסה שוב";
+    document.getElementById("preview-err").classList.remove("hidden");
+    show("view-preview");
+  };
+  img.src = imgUrl;
 }
 
 function downloadImage() {
-  html2canvas(document.getElementById("card-capture"), { scale: 3, useCORS: true }).then(canvas => {
-    const a = document.createElement("a");
-    a.download = "business-card.png";
-    a.href = canvas.toDataURL("image/png");
-    a.click();
-  });
+  html2canvas(document.getElementById("card-capture"), { scale: 3, useCORS: true })
+    .then(canvas => {
+      const a = document.createElement("a");
+      a.download = "business-card.png";
+      a.href = canvas.toDataURL("image/png");
+      a.click();
+    }).catch(() => alert("שגיאה בהורדה"));
 }
 </script>
 </body>
