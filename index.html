@@ -45,35 +45,50 @@
   <!-- FORM -->
   <div id="view-form" class="max-w-xl mx-auto bg-white p-8 rounded-[2.5rem] shadow-sm border border-stone-100">
     <h2 class="text-2xl font-bold mb-8 text-center text-[#4a3b2a]">הוסיפו את עצמכם לקהילה — יצירת כרטיס ביקור</h2>
-    <div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-        <div class="field-wrap">
-          <label class="field-label">שם מלא *</label>
-          <input id="in-name" placeholder="מיכל כהן">
-        </div>
-        <div class="field-wrap">
-          <label class="field-label">רקע מקצועי *</label>
-          <input id="in-role" placeholder="מטפלת ברפלקסולוגיה">
-        </div>
+    <div class="space-y-5">
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <input id="in-name" type="text" placeholder="שם מלא *"
+          class="w-full p-4 bg-stone-50 rounded-2xl outline-none transition-all"
+          style="border:1.5px solid #d8cef5"
+          onfocus="this.style.border='2px solid #9b7fd4';this.style.background='#faf8ff'"
+          onblur="this.style.border='1.5px solid #d8cef5';this.style.background='#fafaf9'">
+        <input id="in-role" type="text" placeholder="רקע מקצועי *"
+          class="w-full p-4 bg-stone-50 rounded-2xl outline-none transition-all"
+          style="border:1.5px solid #d8cef5"
+          onfocus="this.style.border='2px solid #9b7fd4';this.style.background='#faf8ff'"
+          onblur="this.style.border='1.5px solid #d8cef5';this.style.background='#fafaf9'">
       </div>
-      <div class="field-wrap">
-        <label class="field-label">רקע טיפולי</label>
-        <textarea id="in-bio" placeholder="ספר על עצמך ועל הטיפול שלך..."></textarea>
+
+      <textarea id="in-bio" placeholder="רקע טיפולי"
+        class="w-full p-4 bg-stone-50 rounded-2xl h-36 outline-none resize-none transition-all"
+        style="border:1.5px solid #d8cef5"
+        onfocus="this.style.border='2px solid #9b7fd4';this.style.background='#faf8ff'"
+        onblur="this.style.border='1.5px solid #d8cef5';this.style.background='#fafaf9'"></textarea>
+
+      <div class="grid grid-cols-2 gap-4">
+        <input id="in-phone" type="text" placeholder="טלפון *" dir="rtl"
+          class="w-full p-4 bg-stone-50 rounded-2xl outline-none transition-all"
+          style="border:1.5px solid #d8cef5"
+          onfocus="this.style.border='2px solid #9b7fd4';this.style.background='#faf8ff'"
+          onblur="this.style.border='1.5px solid #d8cef5';this.style.background='#fafaf9'">
+        <input id="in-loc" type="text" placeholder="מיקום *"
+          class="w-full p-4 bg-stone-50 rounded-2xl outline-none transition-all"
+          style="border:1.5px solid #d8cef5"
+          onfocus="this.style.border='2px solid #9b7fd4';this.style.background='#faf8ff'"
+          onblur="this.style.border='1.5px solid #d8cef5';this.style.background='#fafaf9'">
       </div>
-      <div class="grid grid-cols-2 gap-4 mb-4">
-        <div class="field-wrap">
-          <label class="field-label">טלפון *</label>
-          <input id="in-phone" placeholder="050-0000000" dir="rtl">
-        </div>
-        <div class="field-wrap">
-          <label class="field-label">מיקום *</label>
-          <input id="in-loc" placeholder="תל אביב">
-        </div>
-      </div>
-      <p id="form-err" class="text-red-400 text-sm text-center mb-3 hidden"></p>
+
+      <p id="form-err" class="text-red-400 text-sm text-center hidden"></p>
+
       <div class="flex justify-center" style="margin-right:20px">
-        <button class="btn-main" style="width:auto;padding:12px 36px" onclick="submitForm()">הצטרפות לקהילה</button>
+        <button id="btn-submit" onclick="submitForm()"
+          class="px-10 py-3 rounded-2xl font-bold shadow-md hover:brightness-110 transition-all text-base text-white"
+          style="background:#8b6f47">
+          הצטרפות לקהילה
+        </button>
       </div>
+
     </div>
   </div>
 
