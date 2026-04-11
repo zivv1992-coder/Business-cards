@@ -167,7 +167,25 @@ function show(id) {
   document.getElementById(id).style.display = "block";
 }
 
-function backToForm() { show("view-form"); }
+function backToForm() {
+  // Reset form
+  document.getElementById("in-name").value = "";
+  document.getElementById("in-role").value = "";
+  document.getElementById("in-bio").value = "";
+  document.getElementById("in-phone").value = "";
+  document.getElementById("in-loc").value = "";
+  // Reset card
+  document.getElementById("card-img").src = "";
+  document.getElementById("out-name").textContent = "";
+  document.getElementById("out-role").textContent = "";
+  document.getElementById("out-phone").textContent = "";
+  document.getElementById("out-loc").textContent = "";
+  const phoneWrap = document.getElementById("out-phone-wrap");
+  const locWrap = document.getElementById("out-loc-wrap");
+  if (phoneWrap) phoneWrap.style.display = "none";
+  if (locWrap) locWrap.style.display = "none";
+  show("view-form");
+}
 
 function buildPrompt(role, bio) {
   const text = (role + " " + bio).toLowerCase();
