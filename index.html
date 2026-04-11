@@ -42,7 +42,7 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <input id="in-name" type="text" placeholder="שם מלא *"
           class="w-full p-4 bg-stone-50 rounded-2xl outline-none transition-all"
-          style="border:1px solid #d8cef5;focus-outline:none"
+          style="border:1.5px solid #d8cef5"
           onfocus="this.style.border='2px solid #9b7fd4';this.style.background='#faf8ff'"
           onblur="this.style.border='1.5px solid #d8cef5';this.style.background='#fafaf9'">
         <input id="in-role" type="text" placeholder="רקע מקצועי *"
@@ -59,7 +59,7 @@
         onblur="this.style.border='1.5px solid #d8cef5';this.style.background='#fafaf9'"></textarea>
 
       <div class="grid grid-cols-2 gap-4">
-        <input id="in-phone" type="text" placeholder="טלפון *"
+        <input id="in-phone" type="text" placeholder="טלפון *" dir="rtl"
           class="w-full p-4 bg-stone-50 rounded-2xl outline-none transition-all"
           style="border:1.5px solid #d8cef5"
           onfocus="this.style.border='2px solid #9b7fd4';this.style.background='#faf8ff'"
@@ -73,7 +73,7 @@
 
       <p id="form-err" class="text-red-400 text-sm text-center hidden"></p>
 
-      <div class="flex justify-center">
+      <div class="flex justify-center" style="margin-right:20px">
         <button id="btn-submit" onclick="submitForm()"
           class="px-10 py-3 rounded-2xl font-bold shadow-md hover:brightness-110 transition-all text-base text-white"
           style="background:#8b6f47">
@@ -85,18 +85,17 @@
   </div>
 
   <!-- LOADING -->
-  <div id="view-loading" style="display:none;">
+  <div id="view-loading" style="display:none">
     <div class="flex flex-col items-center justify-center py-24">
       <div class="spinner"></div>
       <p class="text-[#8b6f47] font-semibold text-lg mb-2">מייצר את האיור שלך...</p>
-      <p class="text-stone-400 text-sm">זה לוקח כ-10 שניות</p>
+      <p class="text-stone-400 text-sm">זה לוקח כ-20 שניות</p>
     </div>
   </div>
 
   <!-- PREVIEW -->
-  <div id="view-preview" style="display:none;">
+  <div id="view-preview" style="display:none">
     <div class="flex flex-col items-center">
-
       <div id="card-capture"
         class="w-full max-w-2xl bg-[#fdfaf6] rounded-3xl overflow-hidden flex relative border border-stone-200 card-shadow"
         style="aspect-ratio:1.75">
@@ -104,10 +103,10 @@
           <img id="card-img" class="w-full h-full object-cover watercolor-blend" src="" alt="">
         </div>
         <div class="flex-1 flex flex-col justify-center p-8 z-10 text-[#2a2118] card-font">
-          <h2 id="out-name" class="font-bold mb-1" style="font-size:clamp(18px,3.5vw,26px);letter-spacing:-0.3px;line-height:1.2"></h2>
-          <p id="out-role" class="font-light tracking-widest mb-4 text-[#8b6f47]" style="font-size:clamp(10px,1.5vw,13px);letter-spacing:1.5px"></p>
-          <div class="w-8 h-px mb-4 bg-[#8b6f47] opacity-50"></div>
-          <div class="space-y-2 opacity-60" style="font-family:'Assistant',sans-serif;font-size:clamp(9px,1.3vw,12px)">
+          <h2 id="out-name" class="font-bold mb-2" style="font-size:clamp(26px,5vw,38px);letter-spacing:-0.5px;line-height:1.2"></h2>
+          <p id="out-role" class="font-light tracking-widest mb-5 text-[#8b6f47]" style="font-size:clamp(13px,2vw,17px);letter-spacing:1.5px"></p>
+          <div class="w-10 h-px mb-5 bg-[#8b6f47] opacity-40"></div>
+          <div class="space-y-3 opacity-70" style="font-family:'Assistant',sans-serif;font-size:clamp(12px,1.8vw,15px)">
             <div id="out-phone"></div>
             <div id="out-loc"></div>
           </div>
@@ -124,16 +123,16 @@
         </button>
         <button onclick="backToForm()"
           class="flex-1 bg-white py-4 rounded-xl font-bold border-2 hover:bg-stone-50 transition-all"
-          style="color:#8b6f47; border-color:#8b6f47">
+          style="color:#8b6f47;border-color:#8b6f47">
           ← מלא שוב
         </button>
       </div>
-
     </div>
   </div>
 
 </div>
 <script>
+const HF_TOKEN  = "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";
 const SHEET_URL = "https://script.google.com/macros/s/AKfycby6m6V5HLlsoHAGpHAnhWY1Edm4M5DWnIscEgyupSOTQgAJPS44c3Dl4Z3WC3u-Vm13UA/exec";
 
 function show(id) {
@@ -143,18 +142,29 @@ function show(id) {
   document.getElementById(id).style.display = "block";
 }
 
-function backToForm() {
-  show("view-form");
+function backToForm() { show("view-form"); }
+
+async function generateImage(prompt) {
+  const res = await fetch("https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${HF_TOKEN}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ inputs: prompt, parameters: { num_inference_steps: 20 } })
+  });
+  if (!res.ok) throw new Error("שגיאה בייצור תמונה: " + res.status);
+  const blob = await res.blob();
+  return URL.createObjectURL(blob);
 }
 
 async function submitForm() {
-  const name      = document.getElementById("in-name").value.trim();
-  const role      = document.getElementById("in-role").value.trim();
-  const bio       = document.getElementById("in-bio").value.trim();
-  const imageDesc = `${role}. ${bio}`;
-  const phone     = document.getElementById("in-phone").value.trim();
-  const loc       = document.getElementById("in-loc").value.trim();
-  const errEl     = document.getElementById("form-err");
+  const name  = document.getElementById("in-name").value.trim();
+  const role  = document.getElementById("in-role").value.trim();
+  const bio   = document.getElementById("in-bio").value.trim();
+  const phone = document.getElementById("in-phone").value.trim();
+  const loc   = document.getElementById("in-loc").value.trim();
+  const errEl = document.getElementById("form-err");
 
   if (!name || !role || !phone || !loc) {
     errEl.textContent = "נא למלא את כל השדות המסומנים ב-*";
@@ -164,28 +174,20 @@ async function submitForm() {
   errEl.classList.add("hidden");
   show("view-loading");
 
-  // Translate Hebrew to English using MyMemory (free, no key needed)
+  // Translate Hebrew to English via MyMemory
   let englishDesc = `${role} therapist treatment, minimalist watercolor style`;
-  if (imageDesc) {
-    try {
-      const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(imageDesc)}&langpair=he|en`);
-      const data = await res.json();
-      if (data.responseStatus === 200) {
-        englishDesc = data.responseData.translatedText;
-      }
-    } catch(e) {
-      // fallback to default
-    }
-  }
+  const heText = `${role}. ${bio}`;
+  try {
+    const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(heText)}&langpair=he|en`);
+    const data = await res.json();
+    if (data.responseStatus === 200) englishDesc = data.responseData.translatedText;
+  } catch(e) {}
 
-  // Generate image via Pollinations flux-schnell
   const prompt = `Minimalist watercolor illustration for a business card. ${englishDesc}. Style: simple clean watercolor painting, soft pastel colors only, white background, delicate brush strokes, no text, no borders, elegant and professional.`;
-  const imgUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=800&height=600&model=flux-schnell&nologo=true&seed=${Date.now()}`;
 
-  // Preload image
-  const img = new Image();
-  img.crossOrigin = "anonymous";
-  img.onload = () => {
+  try {
+    const imgUrl = await generateImage(prompt);
+
     document.getElementById("card-img").src = imgUrl;
     document.getElementById("out-name").textContent = name;
     document.getElementById("out-role").textContent = role;
@@ -193,7 +195,6 @@ async function submitForm() {
     document.getElementById("out-loc").textContent   = loc   ? "📍 " + loc   : "";
     document.getElementById("preview-err").classList.add("hidden");
 
-    // Save to Google Sheets (silent)
     fetch(SHEET_URL, {
       method: "POST",
       mode: "no-cors",
@@ -202,13 +203,12 @@ async function submitForm() {
     }).catch(() => {});
 
     show("view-preview");
-  };
-  img.onerror = () => {
-    document.getElementById("preview-err").textContent = "שגיאה בטעינת התמונה — נסה שוב";
-    document.getElementById("preview-err").classList.remove("hidden");
-    show("view-preview");
-  };
-  img.src = imgUrl;
+
+  } catch(err) {
+    show("view-form");
+    errEl.textContent = "שגיאה: " + err.message;
+    errEl.classList.remove("hidden");
+  }
 }
 
 function downloadImage() {
