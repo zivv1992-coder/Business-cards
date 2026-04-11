@@ -6,24 +6,32 @@
 <title>קהילת המטפלים</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;700;900&family=Noto+Serif+Hebrew:wght@300;400;600;700&family=Assistant:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@200;300;400;500;600;700&family=Heebo:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-  body { font-family: 'Assistant', sans-serif; background-color: #fdfaf6; }
-  .card-font { font-family: 'Frank Ruhl Libre', serif; }
-  .watercolor-blend {
-    mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 92%);
-    -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 92%);
+  body { font-family:'Assistant',sans-serif; background:#fdfaf6; }
+  .card-shadow { box-shadow:0 20px 60px rgba(139,111,71,0.15),0 4px 16px rgba(0,0,0,0.06); }
+  .spinner { width:40px;height:40px;border:3px solid #e8ddd0;border-top-color:#8b6f47;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 16px; }
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .field-wrap { display:flex;flex-direction:column;margin-bottom:16px; }
+  .field-label { font-size:12px;font-weight:500;color:#888;margin-bottom:5px; }
+  input,textarea {
+    width:100%;padding:10px 14px;border-radius:10px;
+    border:1.5px solid #d8cef5;background:#fff;
+    font-family:'Assistant',sans-serif;font-size:14px;
+    outline:none;direction:rtl;box-sizing:border-box;
+    transition:border 0.2s,background 0.2s;color:#2a2118;
   }
-  .card-shadow { box-shadow: 0 20px 60px rgba(139,111,71,0.18), 0 4px 16px rgba(0,0,0,0.06); }
-  .spinner {
-    width: 40px; height: 40px;
-    border: 3px solid #e8ddd0;
-    border-top-color: #8b6f47;
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-    margin: 0 auto 16px;
+  input:focus,textarea:focus { border:2px solid #9b7fd4;background:#faf8ff; }
+  textarea { resize:none;height:90px;line-height:1.65; }
+  .btn-main {
+    width:100%;padding:13px;border-radius:12px;border:none;
+    background:#8b6f47;color:#fff;font-family:'Assistant',sans-serif;
+    font-size:15px;font-weight:700;cursor:pointer;margin-top:8px;
+    transition:opacity 0.2s;
   }
-  @keyframes spin { to { transform: rotate(360deg); } }
+  .btn-main:hover{opacity:0.88}
+  .btn-main:disabled{opacity:0.5;cursor:not-allowed}
+  .watercolor-blob { position:absolute;filter:blur(50px);opacity:0.22;border-radius:50%;z-index:1; }
 </style>
 </head>
 <body class="p-4 md:p-8">
@@ -37,50 +45,35 @@
   <!-- FORM -->
   <div id="view-form" class="max-w-xl mx-auto bg-white p-8 rounded-[2.5rem] shadow-sm border border-stone-100">
     <h2 class="text-2xl font-bold mb-8 text-center text-[#4a3b2a]">הוסיפו את עצמכם לקהילה — יצירת כרטיס ביקור</h2>
-    <div class="space-y-5">
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <input id="in-name" type="text" placeholder="שם מלא *"
-          class="w-full p-4 bg-stone-50 rounded-2xl outline-none transition-all"
-          style="border:1.5px solid #d8cef5"
-          onfocus="this.style.border='2px solid #9b7fd4';this.style.background='#faf8ff'"
-          onblur="this.style.border='1.5px solid #d8cef5';this.style.background='#fafaf9'">
-        <input id="in-role" type="text" placeholder="רקע מקצועי *"
-          class="w-full p-4 bg-stone-50 rounded-2xl outline-none transition-all"
-          style="border:1.5px solid #d8cef5"
-          onfocus="this.style.border='2px solid #9b7fd4';this.style.background='#faf8ff'"
-          onblur="this.style.border='1.5px solid #d8cef5';this.style.background='#fafaf9'">
+    <div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div class="field-wrap">
+          <label class="field-label">שם מלא *</label>
+          <input id="in-name" placeholder="מיכל כהן">
+        </div>
+        <div class="field-wrap">
+          <label class="field-label">רקע מקצועי *</label>
+          <input id="in-role" placeholder="מטפלת ברפלקסולוגיה">
+        </div>
       </div>
-
-      <textarea id="in-bio" placeholder="רקע טיפולי"
-        class="w-full p-4 bg-stone-50 rounded-2xl h-36 outline-none resize-none transition-all"
-        style="border:1.5px solid #d8cef5"
-        onfocus="this.style.border='2px solid #9b7fd4';this.style.background='#faf8ff'"
-        onblur="this.style.border='1.5px solid #d8cef5';this.style.background='#fafaf9'"></textarea>
-
-      <div class="grid grid-cols-2 gap-4">
-        <input id="in-phone" type="text" placeholder="טלפון *" dir="rtl"
-          class="w-full p-4 bg-stone-50 rounded-2xl outline-none transition-all"
-          style="border:1.5px solid #d8cef5"
-          onfocus="this.style.border='2px solid #9b7fd4';this.style.background='#faf8ff'"
-          onblur="this.style.border='1.5px solid #d8cef5';this.style.background='#fafaf9'">
-        <input id="in-loc" type="text" placeholder="מיקום *"
-          class="w-full p-4 bg-stone-50 rounded-2xl outline-none transition-all"
-          style="border:1.5px solid #d8cef5"
-          onfocus="this.style.border='2px solid #9b7fd4';this.style.background='#faf8ff'"
-          onblur="this.style.border='1.5px solid #d8cef5';this.style.background='#fafaf9'">
+      <div class="field-wrap">
+        <label class="field-label">רקע טיפולי</label>
+        <textarea id="in-bio" placeholder="ספר על עצמך ועל הטיפול שלך..."></textarea>
       </div>
-
-      <p id="form-err" class="text-red-400 text-sm text-center hidden"></p>
-
+      <div class="grid grid-cols-2 gap-4 mb-4">
+        <div class="field-wrap">
+          <label class="field-label">טלפון *</label>
+          <input id="in-phone" placeholder="050-0000000" dir="rtl">
+        </div>
+        <div class="field-wrap">
+          <label class="field-label">מיקום *</label>
+          <input id="in-loc" placeholder="תל אביב">
+        </div>
+      </div>
+      <p id="form-err" class="text-red-400 text-sm text-center mb-3 hidden"></p>
       <div class="flex justify-center" style="margin-right:20px">
-        <button id="btn-submit" onclick="submitForm()"
-          class="px-10 py-3 rounded-2xl font-bold shadow-md hover:brightness-110 transition-all text-base text-white"
-          style="background:#8b6f47">
-          הצטרפות לקהילה
-        </button>
+        <button class="btn-main" style="width:auto;padding:12px 36px" onclick="submitForm()">הצטרפות לקהילה</button>
       </div>
-
     </div>
   </div>
 
@@ -89,64 +82,67 @@
     <div class="flex flex-col items-center justify-center py-24">
       <div class="spinner"></div>
       <p class="text-[#8b6f47] font-semibold text-lg mb-2">מייצר את האיור שלך...</p>
-      <p class="text-stone-400 text-sm">זה לוקח כ-20 שניות</p>
+      <p class="text-stone-400 text-sm">זה לוקח כ-15 שניות</p>
     </div>
   </div>
 
   <!-- PREVIEW -->
   <div id="view-preview" style="display:none">
     <div class="flex flex-col items-center">
-      <div id="card-capture"
-        class="w-full max-w-2xl rounded-3xl overflow-hidden relative card-shadow"
-        style="aspect-ratio:1.75; background: #fdfaf6;">
 
-        <!-- Illustration — right side, smaller -->
-        <div class="absolute inset-y-0 right-0" style="width:30%; overflow:hidden;">
-          <img id="card-img" class="w-full h-full object-cover"
-            style="mask-image: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,0.85) 30%, rgba(0,0,0,1) 55%);
-                   -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,0.85) 30%, rgba(0,0,0,1) 55%);
-                   object-position: center;" src="" alt="">
-        </div>
+      <!-- CARD -->
+      <div id="card-capture" style="
+        width:100%;max-width:680px;height:380px;
+        background:#fff;border-radius:20px;
+        box-shadow:0 10px 40px rgba(0,0,0,0.06);
+        display:flex;overflow:hidden;position:relative;
+        border:1px solid #f2f2f2;font-family:'Assistant',sans-serif;
+      ">
+        <!-- Text section -->
+        <div style="flex:1.3;padding:50px 50px 50px 50px;display:flex;flex-direction:column;justify-content:center;z-index:10;background:white;position:relative">
 
-        <!-- Divider line -->
-        <div class="absolute inset-y-0" style="left:70%; width:1px; background: linear-gradient(to bottom, transparent, #c9a87a66, #c9a87a99, #c9a87a66, transparent); z-index:2;"></div>
+          <h2 id="out-name" style="font-family:'Assistant',sans-serif;font-weight:300;font-size:clamp(36px,5.5vw,58px);letter-spacing:1px;line-height:1;color:#1a202c;margin-bottom:4px"></h2>
 
-        <!-- Text — left side, bigger -->
-        <div class="absolute inset-y-0 left-0 flex flex-col justify-center z-10"
-          style="width:70%; padding: 28px 24px 28px 36px;">
-          <h2 id="out-name" class="font-bold mb-3"
-            style="font-family:'Noto Serif Hebrew',serif; font-size:clamp(34px,6vw,50px); letter-spacing:-0.5px; line-height:1.15; color:#2a2118"></h2>
-          <p id="out-role"
-            style="font-family:'Noto Serif Hebrew',serif; font-weight:300; font-size:clamp(15px,2.2vw,20px); letter-spacing:0.8px; color:#8b6f47; margin-bottom:16px;"></p>
-          <div style="width:32px;height:1.5px;background:#8b6f47;opacity:0.45;margin-bottom:14px;border-radius:2px"></div>
-          <div style="font-family:'Assistant',sans-serif;font-size:clamp(12px,1.8vw,16px);color:#2a2118;opacity:0.65;line-height:2">
-            <div id="out-phone"></div>
-            <div id="out-loc"></div>
+          <div id="out-role-wrap" style="font-size:clamp(14px,2vw,22px);font-weight:400;color:#4a5568;margin-bottom:36px;position:relative;display:inline-block;padding-bottom:14px">
+            <span id="out-role"></span>
+            <span style="position:absolute;bottom:0;right:0;width:40px;height:2px;background:#cbd5e0;border-radius:2px;display:block"></span>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div id="out-phone-wrap" style="display:none;flex-direction:column">
+              <span style="font-size:clamp(9px,1vw,11px);text-transform:uppercase;color:#a0aec0;letter-spacing:1.5px;margin-bottom:2px">טלפון</span>
+              <span id="out-phone" style="font-size:clamp(16px,2.2vw,22px);font-weight:400;color:#4a5568"></span>
+            </div>
+            <div id="out-loc-wrap" style="display:none;flex-direction:column">
+              <span style="font-size:clamp(9px,1vw,11px);text-transform:uppercase;color:#a0aec0;letter-spacing:1.5px;margin-bottom:2px">מיקום</span>
+              <span id="out-loc" style="font-size:clamp(16px,2.2vw,22px);font-weight:400;color:#4a5568"></span>
+            </div>
           </div>
         </div>
 
+        <!-- Visual section -->
+        <div style="flex:1;position:relative;background:#fafafa;display:flex;justify-content:center;align-items:center;overflow:hidden">
+          <div class="watercolor-blob" style="width:300px;height:300px;background:#90cdf4;top:-10%;right:-15%"></div>
+          <div class="watercolor-blob" style="width:250px;height:250px;background:#68d391;bottom:0;right:0"></div>
+          <div class="watercolor-blob" style="width:180px;height:180px;background:#f6e05e;top:30%;right:20%"></div>
+          <img id="card-img" style="position:absolute;width:90%;height:90%;object-fit:cover;z-index:5;opacity:0.85;
+            mask-image:radial-gradient(ellipse at center, black 40%, transparent 80%);
+            -webkit-mask-image:radial-gradient(ellipse at center, black 40%, transparent 80%);"
+            src="" alt="">
+        </div>
       </div>
 
       <p id="preview-err" class="text-red-400 text-sm mt-4 hidden"></p>
 
-      <div class="mt-8 flex gap-4 w-full max-w-md">
-        <button onclick="downloadImage()"
-          class="flex-1 text-white py-4 rounded-xl font-bold shadow-md hover:brightness-110 transition-all"
-          style="background:#8b6f47">
-          💾 שמור תמונה
-        </button>
-        <button onclick="backToForm()"
-          class="flex-1 bg-white py-4 rounded-xl font-bold border-2 hover:bg-stone-50 transition-all"
-          style="color:#8b6f47;border-color:#8b6f47">
-          ← מלא שוב
-        </button>
+      <div class="mt-8 flex gap-4 w-full max-w-md justify-center">
+        <button onclick="downloadImage()" class="btn-main" style="width:auto;padding:11px 28px">💾 שמור תמונה</button>
+        <button onclick="backToForm()" style="padding:11px 20px;border-radius:12px;cursor:pointer;border:2px solid #8b6f47;background:transparent;color:#8b6f47;font-family:'Assistant',sans-serif;font-size:14px;font-weight:600">← מלא שוב</button>
       </div>
     </div>
   </div>
 
 </div>
 <script>
-const HF_TOKEN  = "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";
 const SHEET_URL = "https://script.google.com/macros/s/AKfycby6m6V5HLlsoHAGpHAnhWY1Edm4M5DWnIscEgyupSOTQgAJPS44c3Dl4Z3WC3u-Vm13UA/exec";
 
 function show(id) {
@@ -158,15 +154,63 @@ function show(id) {
 
 function backToForm() { show("view-form"); }
 
-async function generateImage(prompt) {
-  const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=800&height=600&model=flux&nologo=true&enhance=true&seed=${Date.now()}`;
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.crossOrigin = "anonymous";
-    img.onload = () => resolve(url);
-    img.onerror = () => reject(new Error("שגיאה בטעינת התמונה"));
-    img.src = url;
-  });
+function buildPrompt(role, bio) {
+  const text = (role + " " + bio).toLowerCase();
+  const scenes = {
+    'עיסוי תאילנדי':'thai massage practitioner in white clothes performing passive yoga-like stretch on client lying on floor mat, both fully clothed',
+    'עיסוי שוודי':'swedish massage therapist performing long flowing strokes on relaxed client lying on massage table',
+    'עיסוי רקמות':'deep tissue massage therapist applying firm focused pressure on client back muscles on treatment table',
+    'עיסוי ספורטאים':'sports massage therapist working on athlete leg muscles with therapeutic pressure',
+    'עיסוי אינטגרטיבי':'integrative massage therapist combining techniques on client lying on massage table',
+    'עיסוי':'massage therapist using both warm hands on client lying face-down on massage table, peaceful setting',
+    'מסאז':'massage therapist with caring hands on client back on treatment table',
+    'שיאצו':'shiatsu therapist kneeling on floor mat beside fully clothed client lying down, pressing meridian points with thumbs and palms',
+    'טווינה':'tuina therapist applying rhythmic rolling hand pressure on fully clothed client on treatment table, Chinese medicine',
+    'טווינא':'tuina therapist pressing and kneading acupressure points on clothed client on treatment table',
+    'רפלקסולוגיה':'reflexology therapist seated, holding client bare foot with both hands, pressing reflex points on sole',
+    'כף רגל':'reflexologist carefully pressing healing points on client foot sole',
+    'קרניו':'craniosacral therapist with extremely gentle hands placed on client head, subtle healing on table',
+    'צי קונג':'qi gong teacher guiding student through slow flowing arm movement, standing facing each other',
+    'יוגה':'yoga therapist gently guiding client in restorative pose, hands on shoulders, soft natural light',
+    'פילאטיס':'pilates instructor guiding client through core exercise on mat, focused and supportive',
+    'אוסטאופתיה':'osteopath therapist gently manipulating client spine with precise hands on treatment table',
+    'פלדנקרייז':'feldenkrais practitioner guiding gentle movement awareness with client on low table',
+    'ווטסו':'watsu therapist cradling client peacefully in warm water, aquatic bodywork',
+    'נטורופתיה':'naturopath in warm consultation with client, medicinal herbs on wooden table',
+    'צמחי מרפא':'clinical herbalist preparing healing remedy with fresh medicinal plants and bottles',
+    'הרבליסט':'herbalist with dried medicinal plants preparing natural healing remedy',
+    'תזונה':'nutritionist therapist in consultation, fresh vegetables and herbs on table',
+    'דיקור':'acupuncturist carefully placing thin needle on client lying peacefully on treatment table',
+    'אקופונקטורה':'acupuncture therapist with client on treatment table, precise gentle needle placement',
+    'רפואה סינית':'traditional chinese medicine practitioner examining client, herbs and acupuncture nearby',
+    'הילינג':'energy healer with warm hands hovering above resting client, soft golden healing light',
+    'ריקי':'reiki practitioner with warm gentle hands placed on client, peaceful serene healing space',
+    'נשימה':'breathwork therapist guiding client in deep conscious breathing, hands on client chest',
+    'ריברסינג':'rebirthing therapist sitting beside client in deep breathwork session, calm space',
+    'דולה':'birth doula holding and supporting pregnant woman with warm compassionate embrace',
+    'מיינדפולנס':'mindfulness guide sitting with client in peaceful meditation, soft warm light',
+    'מדיטציה':'meditation teacher sitting with client in serene meditation pose',
+    'דמיון מודרך':'guided imagery therapist sitting quietly beside relaxed client with eyes closed',
+    'ארומתרפיה':'aromatherapist applying essential oils with gentle massage strokes, botanical bottles nearby',
+    'פרחי באך':'bach flower therapist in gentle consultation, flower essence dropper bottles on table',
+    'קינסיולוגיה':'kinesiologist testing client arm muscle response with gentle pressure',
+    'אקותרפיה':'nature therapist walking mindfully alongside client through peaceful sunlit forest',
+    'פסיכותרפיה':'body-oriented psychotherapist in deep therapeutic conversation with client',
+    'קואצינג':'holistic coach in engaged supportive session with client, sitting facing each other',
+    'nlp':'life coach in warm focused conversation with client, professional setting',
+    'פוקוסינג':'focusing therapist listening deeply to client in quiet therapy room',
+    'ספורט':'sports therapist working on athlete stretched on treatment table',
+    'מטפל':'holistic therapist with caring healing hands on client back, warm treatment room',
+    'מטפלת':'holistic therapist with caring healing hands on client back, warm treatment room',
+    'כאב':'therapist carefully releasing tension with precise healing hands on client',
+    'מגע':'holistic touch therapist with warm healing hands on client in serene room',
+  };
+
+  let scene = 'holistic therapist with gentle healing hands on resting client in serene treatment room';
+  for (const [kw, s] of Object.entries(scenes)) {
+    if (text.includes(kw)) { scene = s; break; }
+  }
+  return `${scene}, delicate watercolor illustration, wet-on-wet technique, soft pigment bleeding, cold-press paper texture, 2-3 pastel colors blush pink sage green warm peach, pure white background, no text no borders, elegant business card art`;
 }
 
 async function submitForm() {
@@ -185,90 +229,44 @@ async function submitForm() {
   errEl.classList.add("hidden");
   show("view-loading");
 
-  // Build smart prompt using Claude API
-  let imagePrompt = `minimalist watercolor illustration of a therapist treating a client, soft pastel colors, white background`;
-  try {
-    const claudeRes = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: "claude-sonnet-4-20250514",
-        max_tokens: 150,
-        messages: [{
-          role: "user",
-          content: `Create a SHORT English image prompt (max 40 words) for a minimalist watercolor business card illustration showing a real therapy scene.
-Therapist info:
-- Profession: ${role}
-- Background: ${bio || "holistic therapy"}
+  // Fill card text
+  document.getElementById("out-name").textContent = name;
+  document.getElementById("out-role").textContent = role;
 
-Instructions:
-- Read BOTH the profession AND background carefully to understand what this therapist actually does
-- If the profession is unclear, infer from the background text what kind of therapy is being performed
-- Show a REAL SCENE matching the therapy: 
-  * Massage → therapist's hands on client lying on treatment table
-  * Shiatsu → therapist pressing on client lying on floor
-  * Reflexology → hands working on client's foot
-  * Yoga/movement → figure in a yoga pose or guided stretch
-  * Energy healing → hands hovering above lying client
-  * If unclear → gentle hands-on healing scene
-- Simple elegant watercolor figures, soft flowing lines
-- 2-3 soft pastel colors only
-- Pure white background, no text, no borders
-Return ONLY the image prompt.`
-        }]
-      })
-    });
-    const claudeData = await claudeRes.json();
-    const generated = claudeData.content?.[0]?.text?.trim();
-    if (generated) imagePrompt = generated;
-  } catch(e) {
-    // fallback
-  }
+  const phoneEl   = document.getElementById("out-phone");
+  const locEl     = document.getElementById("out-loc");
+  const phoneWrap = document.getElementById("out-phone-wrap");
+  const locWrap   = document.getElementById("out-loc-wrap");
+  if (phoneEl && phoneWrap && phone) { phoneEl.textContent = phone; phoneWrap.style.display = "flex"; }
+  if (locEl && locWrap && loc)       { locEl.textContent = loc;     locWrap.style.display = "flex"; }
 
-  const prompt = `${imagePrompt}, soft watercolor style, delicate brush strokes, 2-3 pastel colors, pure white background, no text, elegant minimal business card illustration`;
+  // Build prompt from keywords — no external API needed
+  const prompt = buildPrompt(role, bio);
+  const imgUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=800&height=600&model=flux&nologo=true&enhance=true&seed=${Date.now()}`;
 
-  try {
-    const imgUrl = await generateImage(prompt);
-
-    document.getElementById("out-name").textContent = name;
-    document.getElementById("out-role").innerHTML = `<span>${role}</span><span style="position:absolute;bottom:0;right:0;width:40px;height:2px;background:#cbd5e0;border-radius:2px;display:block"></span>`;
-
-    const phoneWrap = document.getElementById("out-phone-wrap");
-    const locWrap = document.getElementById("out-loc-wrap");
-    if (phone) {
-      document.getElementById("out-phone").textContent = phone;
-      phoneWrap.style.display = "flex";
-    }
-    if (loc) {
-      document.getElementById("out-loc").textContent = loc;
-      locWrap.style.display = "flex";
-    }
+  const img = new Image();
+  img.crossOrigin = "anonymous";
+  img.onload = () => {
+    document.getElementById("card-img").src = imgUrl;
     document.getElementById("preview-err").classList.add("hidden");
-
-    fetch(SHEET_URL, {
-      method: "POST",
-      mode: "no-cors",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, role, bio, phone, loc })
-    }).catch(() => {});
-
+    fetch(SHEET_URL, { method:"POST", mode:"no-cors", headers:{"Content-Type":"application/json"}, body:JSON.stringify({name,role,bio,phone,loc}) }).catch(()=>{});
     show("view-preview");
-
-  } catch(err) {
-    show("view-form");
-    errEl.textContent = "שגיאה: " + err.message;
-    errEl.classList.remove("hidden");
-  }
+  };
+  img.onerror = () => {
+    document.getElementById("card-img").src = imgUrl;
+    show("view-preview");
+  };
+  img.src = imgUrl;
 }
 
 function downloadImage() {
-  html2canvas(document.getElementById("card-capture"), { scale: 3, useCORS: true })
+  html2canvas(document.getElementById("card-capture"), { scale:3, useCORS:true, backgroundColor:"#ffffff" })
     .then(canvas => {
       const a = document.createElement("a");
       a.download = "business-card.png";
       a.href = canvas.toDataURL("image/png");
       a.click();
-    }).catch(() => alert("שגיאה בהורדה"));
+    }).catch(()=> alert("שגיאה בהורדה"));
 }
 </script>
 </body>
