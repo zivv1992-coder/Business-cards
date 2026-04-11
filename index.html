@@ -97,20 +97,34 @@
   <div id="view-preview" style="display:none">
     <div class="flex flex-col items-center">
       <div id="card-capture"
-        class="w-full max-w-2xl bg-[#fdfaf6] rounded-3xl overflow-hidden flex relative border border-stone-200 card-shadow"
-        style="aspect-ratio:1.75">
-        <div class="flex-[1.2] relative overflow-hidden bg-white">
-          <img id="card-img" class="w-full h-full object-cover watercolor-blend" src="" alt="">
+        class="w-full max-w-2xl rounded-3xl overflow-hidden relative card-shadow"
+        style="aspect-ratio:1.75; background: #fdfaf6;">
+
+        <!-- Illustration — right side -->
+        <div class="absolute inset-y-0 right-0" style="width:55%; overflow:hidden;">
+          <img id="card-img" class="w-full h-full object-cover"
+            style="mask-image: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,0.85) 30%, rgba(0,0,0,1) 55%);
+                   -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,0.85) 30%, rgba(0,0,0,1) 55%);
+                   object-position: center;" src="" alt="">
         </div>
-        <div class="flex-1 flex flex-col justify-center p-8 z-10 text-[#2a2118] card-font">
-          <h2 id="out-name" class="font-bold mb-2" style="font-size:clamp(26px,5vw,38px);letter-spacing:-0.5px;line-height:1.2"></h2>
-          <p id="out-role" class="font-light tracking-widest mb-5 text-[#8b6f47]" style="font-size:clamp(13px,2vw,17px);letter-spacing:1.5px"></p>
-          <div class="w-10 h-px mb-5 bg-[#8b6f47] opacity-40"></div>
-          <div class="space-y-3 opacity-70" style="font-family:'Assistant',sans-serif;font-size:clamp(12px,1.8vw,15px)">
+
+        <!-- Divider line -->
+        <div class="absolute inset-y-0" style="left:45%; width:1px; background: linear-gradient(to bottom, transparent, #c9a87a55, #c9a87a88, #c9a87a55, transparent); z-index:2;"></div>
+
+        <!-- Text — left side -->
+        <div class="absolute inset-y-0 left-0 flex flex-col justify-center z-10"
+          style="width:45%; padding: 24px 20px 24px 28px;">
+          <h2 id="out-name" class="font-bold mb-2 card-font"
+            style="font-size:clamp(22px,4.5vw,34px);letter-spacing:-0.5px;line-height:1.2;color:#2a2118"></h2>
+          <p id="out-role" class="font-light mb-4 card-font"
+            style="font-size:clamp(11px,1.8vw,15px);letter-spacing:1.2px;color:#8b6f47;"></p>
+          <div style="width:28px;height:1px;background:#8b6f47;opacity:0.4;margin-bottom:12px;border-radius:2px"></div>
+          <div style="font-family:'Assistant',sans-serif;font-size:clamp(10px,1.5vw,13px);color:#2a2118;opacity:0.65;line-height:1.8">
             <div id="out-phone"></div>
             <div id="out-loc"></div>
           </div>
         </div>
+
       </div>
 
       <p id="preview-err" class="text-red-400 text-sm mt-4 hidden"></p>
@@ -145,17 +159,14 @@ function show(id) {
 function backToForm() { show("view-form"); }
 
 async function generateImage(prompt) {
-  const res = await fetch("https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0", {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${HF_TOKEN}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ inputs: prompt, parameters: { num_inference_steps: 20 } })
+  const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=800&height=600&model=flux&nologo=true&enhance=true&seed=${Date.now()}`;
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => resolve(url);
+    img.onerror = () => reject(new Error("שגיאה בטעינת התמונה"));
+    img.src = url;
   });
-  if (!res.ok) throw new Error("שגיאה בייצור תמונה: " + res.status);
-  const blob = await res.blob();
-  return URL.createObjectURL(blob);
 }
 
 async function submitForm() {
@@ -174,16 +185,47 @@ async function submitForm() {
   errEl.classList.add("hidden");
   show("view-loading");
 
-  // Translate Hebrew to English via MyMemory
-  let englishDesc = `${role} therapist treatment, minimalist watercolor style`;
-  const heText = `${role}. ${bio}`;
+  // Build smart prompt using Claude API
+  let imagePrompt = `minimalist watercolor illustration of a therapist treating a client, soft pastel colors, white background`;
   try {
-    const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(heText)}&langpair=he|en`);
-    const data = await res.json();
-    if (data.responseStatus === 200) englishDesc = data.responseData.translatedText;
-  } catch(e) {}
+    const claudeRes = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 150,
+        messages: [{
+          role: "user",
+          content: `Create a SHORT English image prompt (max 40 words) for a minimalist watercolor business card illustration showing a real therapy scene.
+Therapist info:
+- Profession: ${role}
+- Background: ${bio || "holistic therapy"}
 
-  const prompt = `Minimalist watercolor illustration for a business card. ${englishDesc}. Style: simple clean watercolor painting, soft pastel colors only, white background, delicate brush strokes, no text, no borders, elegant and professional.`;
+Instructions:
+- Read BOTH the profession AND background carefully to understand what this therapist actually does
+- If the profession is unclear, infer from the background text what kind of therapy is being performed
+- Show a REAL SCENE matching the therapy: 
+  * Massage → therapist's hands on client lying on treatment table
+  * Shiatsu → therapist pressing on client lying on floor
+  * Reflexology → hands working on client's foot
+  * Yoga/movement → figure in a yoga pose or guided stretch
+  * Energy healing → hands hovering above lying client
+  * If unclear → gentle hands-on healing scene
+- Simple elegant watercolor figures, soft flowing lines
+- 2-3 soft pastel colors only
+- Pure white background, no text, no borders
+Return ONLY the image prompt.`
+        }]
+      })
+    });
+    const claudeData = await claudeRes.json();
+    const generated = claudeData.content?.[0]?.text?.trim();
+    if (generated) imagePrompt = generated;
+  } catch(e) {
+    // fallback
+  }
+
+  const prompt = `${imagePrompt}, soft watercolor style, delicate brush strokes, 2-3 pastel colors, pure white background, no text, elegant minimal business card illustration`;
 
   try {
     const imgUrl = await generateImage(prompt);
