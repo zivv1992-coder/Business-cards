@@ -6,7 +6,7 @@
 <title>קהילת המטפלים</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;700&family=Assistant:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;700;900&family=Noto+Serif+Hebrew:wght@300;400;600;700&family=Assistant:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
   body { font-family: 'Assistant', sans-serif; background-color: #fdfaf6; }
   .card-font { font-family: 'Frank Ruhl Libre', serif; }
@@ -100,8 +100,8 @@
         class="w-full max-w-2xl rounded-3xl overflow-hidden relative card-shadow"
         style="aspect-ratio:1.75; background: #fdfaf6;">
 
-        <!-- Illustration — right side -->
-        <div class="absolute inset-y-0 right-0" style="width:55%; overflow:hidden;">
+        <!-- Illustration — right side, smaller -->
+        <div class="absolute inset-y-0 right-0" style="width:30%; overflow:hidden;">
           <img id="card-img" class="w-full h-full object-cover"
             style="mask-image: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,0.85) 30%, rgba(0,0,0,1) 55%);
                    -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,0.85) 30%, rgba(0,0,0,1) 55%);
@@ -109,17 +109,17 @@
         </div>
 
         <!-- Divider line -->
-        <div class="absolute inset-y-0" style="left:45%; width:1px; background: linear-gradient(to bottom, transparent, #c9a87a55, #c9a87a88, #c9a87a55, transparent); z-index:2;"></div>
+        <div class="absolute inset-y-0" style="left:70%; width:1px; background: linear-gradient(to bottom, transparent, #c9a87a66, #c9a87a99, #c9a87a66, transparent); z-index:2;"></div>
 
-        <!-- Text — left side -->
+        <!-- Text — left side, bigger -->
         <div class="absolute inset-y-0 left-0 flex flex-col justify-center z-10"
-          style="width:45%; padding: 24px 20px 24px 28px;">
-          <h2 id="out-name" class="font-bold mb-2 card-font"
-            style="font-size:clamp(22px,4.5vw,34px);letter-spacing:-0.5px;line-height:1.2;color:#2a2118"></h2>
-          <p id="out-role" class="font-light mb-4 card-font"
-            style="font-size:clamp(11px,1.8vw,15px);letter-spacing:1.2px;color:#8b6f47;"></p>
-          <div style="width:28px;height:1px;background:#8b6f47;opacity:0.4;margin-bottom:12px;border-radius:2px"></div>
-          <div style="font-family:'Assistant',sans-serif;font-size:clamp(10px,1.5vw,13px);color:#2a2118;opacity:0.65;line-height:1.8">
+          style="width:70%; padding: 28px 24px 28px 36px;">
+          <h2 id="out-name" class="font-bold mb-3"
+            style="font-family:'Noto Serif Hebrew',serif; font-size:clamp(34px,6vw,50px); letter-spacing:-0.5px; line-height:1.15; color:#2a2118"></h2>
+          <p id="out-role"
+            style="font-family:'Noto Serif Hebrew',serif; font-weight:300; font-size:clamp(15px,2.2vw,20px); letter-spacing:0.8px; color:#8b6f47; margin-bottom:16px;"></p>
+          <div style="width:32px;height:1.5px;background:#8b6f47;opacity:0.45;margin-bottom:14px;border-radius:2px"></div>
+          <div style="font-family:'Assistant',sans-serif;font-size:clamp(12px,1.8vw,16px);color:#2a2118;opacity:0.65;line-height:2">
             <div id="out-phone"></div>
             <div id="out-loc"></div>
           </div>
@@ -230,11 +230,19 @@ Return ONLY the image prompt.`
   try {
     const imgUrl = await generateImage(prompt);
 
-    document.getElementById("card-img").src = imgUrl;
     document.getElementById("out-name").textContent = name;
-    document.getElementById("out-role").textContent = role;
-    document.getElementById("out-phone").textContent = phone ? "📞 " + phone : "";
-    document.getElementById("out-loc").textContent   = loc   ? "📍 " + loc   : "";
+    document.getElementById("out-role").innerHTML = `<span>${role}</span><span style="position:absolute;bottom:0;right:0;width:40px;height:2px;background:#cbd5e0;border-radius:2px;display:block"></span>`;
+
+    const phoneWrap = document.getElementById("out-phone-wrap");
+    const locWrap = document.getElementById("out-loc-wrap");
+    if (phone) {
+      document.getElementById("out-phone").textContent = phone;
+      phoneWrap.style.display = "flex";
+    }
+    if (loc) {
+      document.getElementById("out-loc").textContent = loc;
+      locWrap.style.display = "flex";
+    }
     document.getElementById("preview-err").classList.add("hidden");
 
     fetch(SHEET_URL, {
