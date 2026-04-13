@@ -190,60 +190,93 @@ function backToForm() {
 function buildPrompt(role, bio) {
   const text = (role + " " + bio).toLowerCase();
   const scenes = {
-    'עיסוי תאילנדי':'thai massage practitioner in white clothes performing passive yoga-like stretch on client lying on floor mat, both fully clothed',
-    'עיסוי שוודי':'swedish massage therapist performing long flowing strokes on relaxed client lying on massage table',
-    'עיסוי רקמות':'deep tissue massage therapist applying firm focused pressure on client back muscles on treatment table',
-    'עיסוי ספורטאים':'sports massage therapist working on athlete leg muscles with therapeutic pressure',
-    'עיסוי אינטגרטיבי':'integrative massage therapist combining techniques on client lying on massage table',
-    'עיסוי':'massage therapist using both warm hands on client lying face-down on massage table, peaceful setting',
-    'מסאז':'massage therapist with caring hands on client back on treatment table',
-    'שיאצו':'shiatsu therapist kneeling on floor mat beside fully clothed client lying down, pressing meridian points with thumbs and palms',
-    'טווינה':'tuina therapist applying rhythmic rolling hand pressure on fully clothed client on treatment table, Chinese medicine',
-    'טווינא':'tuina therapist pressing and kneading acupressure points on clothed client on treatment table',
-    'רפלקסולוגיה':'reflexology therapist seated, holding client bare foot with both hands, pressing reflex points on sole',
-    'כף רגל':'reflexologist carefully pressing healing points on client foot sole',
-    'קרניו':'craniosacral therapist with extremely gentle hands placed on client head, subtle healing on table',
-    'צי קונג':'qi gong teacher guiding student through slow flowing arm movement, standing facing each other',
-    'יוגה':'yoga therapist gently guiding client in restorative pose, hands on shoulders, soft natural light',
-    'פילאטיס':'pilates instructor guiding client through core exercise on mat, focused and supportive',
-    'אוסטאופתיה':'osteopath therapist gently manipulating client spine with precise hands on treatment table',
-    'פלדנקרייז':'feldenkrais practitioner guiding gentle movement awareness with client on low table',
-    'ווטסו':'watsu therapist cradling client peacefully in warm water, aquatic bodywork',
-    'נטורופתיה':'naturopath in warm consultation with client, medicinal herbs on wooden table',
-    'צמחי מרפא':'clinical herbalist preparing healing remedy with fresh medicinal plants and bottles',
-    'הרבליסט':'herbalist with dried medicinal plants preparing natural healing remedy',
-    'תזונה':'nutritionist therapist in consultation, fresh vegetables and herbs on table',
-    'דיקור':'acupuncturist carefully placing thin needle on client lying peacefully on treatment table',
-    'אקופונקטורה':'acupuncture therapist with client on treatment table, precise gentle needle placement',
-    'רפואה סינית':'traditional chinese medicine practitioner examining client, herbs and acupuncture nearby',
-    'הילינג':'energy healer with warm hands hovering above resting client, soft golden healing light',
-    'ריקי':'reiki practitioner with warm gentle hands placed on client, peaceful serene healing space',
-    'נשימה':'breathwork therapist guiding client in deep conscious breathing, hands on client chest',
-    'ריברסינג':'rebirthing therapist sitting beside client in deep breathwork session, calm space',
-    'דולה':'birth doula holding and supporting pregnant woman with warm compassionate embrace',
-    'מיינדפולנס':'mindfulness guide sitting with client in peaceful meditation, soft warm light',
-    'מדיטציה':'meditation teacher sitting with client in serene meditation pose',
-    'דמיון מודרך':'guided imagery therapist sitting quietly beside relaxed client with eyes closed',
-    'ארומתרפיה':'aromatherapist applying essential oils with gentle massage strokes, botanical bottles nearby',
-    'פרחי באך':'bach flower therapist in gentle consultation, flower essence dropper bottles on table',
-    'קינסיולוגיה':'kinesiologist testing client arm muscle response with gentle pressure',
-    'אקותרפיה':'nature therapist walking mindfully alongside client through peaceful sunlit forest',
-    'פסיכותרפיה':'body-oriented psychotherapist in deep therapeutic conversation with client',
-    'קואצינג':'holistic coach in engaged supportive session with client, sitting facing each other',
-    'nlp':'life coach in warm focused conversation with client, professional setting',
-    'פוקוסינג':'focusing therapist listening deeply to client in quiet therapy room',
-    'ספורט':'sports therapist working on athlete stretched on treatment table',
-    'מטפל':'holistic therapist with caring healing hands on client back, warm treatment room',
-    'מטפלת':'holistic therapist with caring healing hands on client back, warm treatment room',
-    'כאב':'therapist carefully releasing tension with precise healing hands on client',
-    'מגע':'holistic touch therapist with warm healing hands on client in serene room',
+    'עיסוי תאילנדי':'female thai massage therapist in white uniform pressing palms on back of client lying face down on floor mat, side view, clear faces, traditional thai bodywork, serene',
+    'עיסוי שוודי':'female massage therapist standing beside massage table, hands on client back, client lying face down, side view, clear faces, professional spa setting',
+    'עיסוי רקמות':'massage therapist applying deep pressure with both hands on client back muscles, client lying on massage table, side view, clear faces',
+    'עיסוי ספורטאים':'sports massage therapist working on athlete lying on treatment table, therapist pressing on leg muscles, side view, clear faces',
+    'עיסוי אינטגרטיבי':'massage therapist with hands on client lying on massage table, soft healing touch, side view, clear faces, professional setting',
+    'עיסוי':'female massage therapist standing beside massage table, both hands gently on client back, client lying face down, side view, clear faces, peaceful room',
+    'מסאז':'massage therapist with caring hands on client lying on treatment table, side view, clear faces',
+    'שיאצו':'shiatsu therapist kneeling on floor beside client lying face down on mat, pressing with palms on client upper back, side view, clear faces, both fully clothed',
+    'טווינה':'tuina therapist standing beside treatment table, applying hand pressure on client back, client lying face down, side view, clear faces, Chinese medicine setting',
+    'טווינא':'tuina therapist pressing acupressure points on clothed client on table, side view, clear faces',
+    'רפלקסולוגיה':'reflexology therapist seated on stool, holding client foot in both hands, pressing sole, client reclined in chair, side view, clear faces, calm setting',
+    'כף רגל':'reflexologist holding and pressing client foot with both hands, seated, side view, clear faces',
+    'רגל':'reflexology therapist working on client foot, seated facing each other, clear faces',
+    'קרניו':'craniosacral therapist standing at head of table, hands very gently on client skull, client lying on back, side view, clear faces, serene room',
+    'צי קונג':'qi gong teacher and student standing facing each other, both with arms raised in slow flowing movement, clear faces, peaceful studio',
+    'יוגה':'yoga therapist kneeling behind seated client, hands gently on client shoulders guiding stretch, clear faces, soft natural light',
+    'פילאטיס':'pilates instructor kneeling beside client lying on mat, guiding client leg movement, side view, clear faces',
+    'אוסטאופתיה':'osteopath standing beside treatment table, hands on client spine, client lying face down, side view, clear faces, clinical setting',
+    'פלדנקרייז':'feldenkrais practitioner kneeling beside client lying on low table, one hand gently on client shoulder, side view, clear faces',
+    'ווטסו':'watsu therapist standing in warm water, cradling client floating on back, both visible from side, clear faces, pool setting',
+    'נטורופתיה':'naturopath sitting across table from client, herbs and plants visible on table, both facing slightly toward viewer, clear faces, warm office',
+    'צמחי מרפא':'herbalist standing at wooden table with fresh plants and remedy bottles, preparing natural medicine, clear face, warm natural setting',
+    'הרבליסט':'clinical herbalist at table with medicinal plants and tincture bottles, clear face, professional natural setting',
+    'תזונה':'nutritionist sitting with client at table, vegetables and healthy foods visible, both facing viewer, clear faces, bright consultation room',
+    'דיקור':'acupuncturist standing beside treatment table, carefully placing needle on client lying face down, side view, clear faces, serene clinical setting',
+    'אקופונקטורה':'acupuncture therapist placing needles on client lying on treatment table, side view, clear faces',
+    'רפואה סינית':'traditional chinese medicine doctor sitting across from patient, taking pulse, herbs visible, both facing viewer, clear faces',
+    'הילינג':'energy healer standing beside client lying on table, both hands hovering above client chest, soft warm light between hands, side view, clear faces',
+    'ריקי':'reiki practitioner standing beside client lying on table, hands gently placed on client, soft golden light, side view, clear faces',
+    'נשימה':'breathwork therapist sitting beside client lying on mat, one hand on client chest guiding breathing, side view, clear faces',
+    'ריברסינג':'rebirthing therapist sitting attentively beside client lying on mat doing breathwork, side view, clear faces, calm room',
+    'דולה':'birth doula standing behind seated pregnant woman, arms around her shoulders in supportive embrace, side view, clear faces, warm setting',
+    'מיינדפולנס':'mindfulness teacher sitting cross-legged facing student in meditation pose, both visible, clear faces, peaceful bright room',
+    'מדיטציה':'meditation guide sitting facing client in peaceful meditation pose, soft natural light, both visible, clear faces',
+    'דמיון מודרך':'therapist sitting in chair beside client lying with eyes closed on couch, side view, clear faces, quiet therapy room',
+    'ארומתרפיה':'aromatherapist applying oil to client back with gentle strokes, client lying on massage table, botanical bottles visible, side view, clear faces',
+    'פרחי באך':'therapist sitting across small table from client, flower essence dropper bottles between them, both facing slightly toward viewer, clear faces',
+    'קינסיולוגיה':'kinesiologist standing facing client, holding client outstretched arm, testing muscle response, clear faces, professional setting',
+    'אקותרפיה':'nature therapist and client walking side by side on peaceful forest path, both visible, clear faces, sunlight through trees',
+    'פסיכותרפיה':'psychotherapist sitting in chair facing client on couch, attentive posture, both visible, clear faces, warm therapy room',
+    'קואצינג':'life coach sitting across from client, both leaning forward in engaged conversation, clear faces, bright professional office',
+    'nlp':'coach sitting facing client, both in open attentive posture, clear faces, modern office setting',
+    'פוקוסינג':'focusing therapist sitting quietly facing client, client with eyes slightly closed, both visible, clear faces, quiet room',
+    'ספורט':'sports therapist standing beside athlete on treatment table, hands on athlete leg, side view, clear faces',
   };
 
-  let scene = 'holistic therapist with gentle healing hands on resting client in serene treatment room';
-  for (const [kw, s] of Object.entries(scenes)) {
-    if (text.includes(kw)) { scene = s; break; }
+  // נקה פסיקים ותווים מיוחדים וחפש כל מילה בנפרד
+  const words = text.replace(/[,،;\/\-–]/g, ' ').split(/\s+/).filter(w => w.length > 1);
+  
+  // חפש התאמה — קודם ביטויים ארוכים, אחר כך קצרים
+  let scene = null;
+  const sortedKeys = Object.keys(scenes).sort((a,b) => b.length - a.length);
+  
+  // נסה התאמה מלאה
+  for (const kw of sortedKeys) {
+    if (text.includes(kw)) { scene = scenes[kw]; break; }
   }
-  return `${scene}, delicate watercolor illustration, wet-on-wet technique, soft pigment bleeding, cold-press paper texture, 2-3 pastel colors blush pink sage green warm peach, pure white background, no text no borders, elegant business card art`;
+  
+  // אם לא נמצאה מילת מפתח — תמיד שולח ל-AI להבנה חכמה
+  if (!scene) {
+    try {
+      const q = encodeURIComponent(`You are an expert at creating image prompts for therapist business cards.
+Read this therapist description carefully and create a SHORT English image prompt (max 35 words) showing a real specific therapy scene that matches what this therapist does.
+Profession: ${role}
+Background: ${bio || role}
+Rules: 
+- Understand what kind of therapy this is from context
+- Show therapist actively treating client in a scene specific to this therapy
+- side view, clear faces, specific therapy action
+- watercolor style
+Return ONLY the image prompt, nothing else.`);
+      const res = await fetch(`https://text.pollinations.ai/${q}?model=openai`);
+      const generated = (await res.text()).trim();
+      if (generated && generated.length > 10) {
+        scene = generated;
+      } else {
+        // אם ה-API החזיר ריק — תן לו לנסות שוב בשאלה פשוטה יותר
+        const q2 = encodeURIComponent(`Create a 30-word image prompt for a watercolor business card showing: ${role}. ${bio}. Show therapist and client, side view, clear faces.`);
+        const res2 = await fetch(`https://text.pollinations.ai/${q2}?model=openai`);
+        scene = (await res2.text()).trim() || `${role} therapist treating client, side view, clear faces, watercolor style`;
+      }
+    } catch(e) {
+      scene = `${role} therapist treating client, healing hands, side view, clear faces, watercolor style`;
+    }
+  }
+
+  return `Watercolor illustration: ${scene}. Style: soft delicate watercolor painting, light pastel colors blush pink and sage green, white background, elegant, no text, no borders, business card illustration`;
 }
 
 async function submitForm() {
