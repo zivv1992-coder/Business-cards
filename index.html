@@ -57,7 +57,7 @@
       </div>
       <p id="form-err" class="text-red-400 text-sm text-center hidden"></p>
       <div class="flex justify-center" style="margin-right:20px">
-        <button onclick="submitForm()"
+        <button onclick="window.submitForm()"
           class="px-10 py-3 rounded-2xl font-bold shadow-md hover:brightness-110 transition-all text-base text-white"
           style="background:#8b6f47">
           הצטרפות לקהילה
@@ -112,10 +112,10 @@
 
       <p id="preview-err" class="text-red-400 text-sm mt-4 hidden"></p>
       <div class="mt-8 flex gap-4 w-full max-w-md">
-        <button onclick="downloadImage()"
+        <button onclick="window.downloadImage()"
           class="flex-1 text-white py-4 rounded-xl font-bold shadow-md hover:brightness-110 transition-all"
           style="background:#8b6f47">💾 שמור תמונה</button>
-        <button onclick="backToForm()"
+        <button onclick="window.backToForm()"
           class="flex-1 bg-white py-4 rounded-xl font-bold border-2 hover:bg-stone-50 transition-all"
           style="color:#8b6f47;border-color:#8b6f47">← מלא שוב</button>
       </div>
