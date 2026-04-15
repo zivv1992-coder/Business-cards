@@ -225,7 +225,7 @@ function buildPrompt(role, bio) {
   for (const [kw, s] of Object.entries(scenes)) {
     if (text.includes(kw)) { scene = s; break; }
   }
-  return `${scene}, realistic proportions and faces, no distorted features, delicate watercolor illustration, wet-on-wet technique, soft pigment bleeding, cold-press paper texture, 2-3 pastel colors blush pink sage green warm peach, pure white background, no text no borders, elegant business card art`;
+  return `${scene}, realistic proportions and faces, anatomically correct, clear distinct body parts no overlapping limbs, well-defined hands and feet, professional anatomy, clean composition, delicate watercolor illustration, wet-on-wet technique, soft pigment bleeding, cold-press paper texture, 2-3 pastel colors blush pink sage green warm peach, pure white background, no text no borders, elegant business card art`;
 }
 
 async function submitForm() {
