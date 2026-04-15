@@ -96,10 +96,7 @@
         <div class="absolute inset-y-0 left-0 flex flex-col justify-center z-10"
           style="width:50%;padding:28px 20px 28px 36px;">
           <h2 id="out-name" style="font-family:'Assistant',sans-serif;font-weight:300;font-size:clamp(28px,5vw,46px);letter-spacing:1px;line-height:1;color:#1a202c;margin-bottom:4px"></h2>
-          <div style="font-size:clamp(13px,1.8vw,18px);font-weight:400;color:#4a5568;margin-bottom:28px;position:relative;padding-bottom:14px">
-            <span id="out-role"></span>
-            <span style="position:absolute;bottom:0;right:0;width:36px;height:1.5px;background:#cbd5e0;border-radius:2px;display:block"></span>
-          </div>
+          <div id="out-role" style="font-size:clamp(13px,1.8vw,18px);font-weight:400;color:#4a5568;margin-bottom:28px;padding-bottom:14px;border-bottom:1.5px solid #cbd5e0;"></div>
           <div style="display:flex;flex-direction:column;gap:12px">
             <div id="out-phone-wrap" style="display:none;flex-direction:column">
               <span style="font-size:10px;text-transform:uppercase;color:#a0aec0;letter-spacing:1.5px;margin-bottom:2px">טלפון</span>
@@ -234,18 +231,24 @@ function submitForm() {
   const prompt = buildPrompt(role, bio);
   const imgUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=800&height=600&model=flux&nologo=true&enhance=true&seed=${Date.now()}`;
 
-  // מלא פרטי כרטיס מיד
-  document.getElementById("out-name").textContent = name;
+  const nameEl = document.getElementById("out-name");
+  if (nameEl) nameEl.textContent = name;
   const roleEl = document.getElementById("out-role");
   if (roleEl) {
-    const roleSpan = roleEl.querySelector("span");
-    if (roleSpan) roleSpan.textContent = role;
-    else roleEl.textContent = role;
+    roleEl.textContent = role;
+  } else {
+    console.warn("אלמנט out-role לא נמצא בדף!");
   }
-  const phoneWrap = document.getElementById("out-phone-wrap");
-  const locWrap   = document.getElementById("out-loc-wrap");
-  if (phoneWrap) { document.getElementById("out-phone").textContent = phone; phoneWrap.style.display = "flex"; }
-  if (locWrap)   { document.getElementById("out-loc").textContent = loc;     locWrap.style.display = "flex"; }
+  const phoneEl = document.getElementById("out-phone");
+  if (phoneEl) {
+    phoneEl.textContent = phone;
+    document.getElementById("out-phone-wrap").style.display = "flex";
+  }
+  const locEl = document.getElementById("out-loc");
+  if (locEl) {
+    locEl.textContent = loc;
+    document.getElementById("out-loc-wrap").style.display = "flex";
+  }
 
   const img = new Image();
   img.crossOrigin = "anonymous";
@@ -256,8 +259,9 @@ function submitForm() {
 
   img.onload = function() {
     clearTimeout(timeout);
-    document.getElementById("card-img").src = imgUrl;
-    fetch(SHEET_URL, { method:"POST", mode:"no-cors", headers:{"Content-Type":"application/json"}, body:JSON.stringify({name,role,bio,phone,loc}) }).catch(()=>{});
+    var cardImg = document.getElementById("card-img");
+    if (cardImg) cardImg.src = imgUrl;
+    fetch(SHEET_URL, { method:"POST", mode:"no-cors", headers:{"Content-Type":"application/json"}, body:JSON.stringify({name,role,bio,phone,loc}) }).catch(function(){});
     show("view-preview");
   };
   img.onerror = function() {
