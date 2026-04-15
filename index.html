@@ -114,7 +114,7 @@
         border:1px solid #f2f2f2;font-family:'Assistant',sans-serif;
       ">
         <!-- Text section -->
-        <div style="flex:1.3;padding:50px 50px 50px 50px;display:flex;flex-direction:column;justify-content:center;z-index:10;background:white;position:relative">
+        <div style="flex:1.67;padding:50px 50px 50px 50px;display:flex;flex-direction:column;justify-content:center;z-index:10;background:white;position:relative">
 
           <h2 id="out-name" style="font-family:'Assistant',sans-serif;font-weight:300;font-size:clamp(36px,5.5vw,58px);letter-spacing:1px;line-height:1;color:#1a202c;margin-bottom:4px"></h2>
 
@@ -136,7 +136,7 @@
         </div>
 
         <!-- Visual section -->
-        <div style="flex:1;position:relative;background:#fafafa;display:flex;justify-content:center;align-items:center;overflow:hidden">
+        <div style="flex:2.4;position:relative;background:#fafafa;display:flex;justify-content:center;align-items:center;overflow:hidden">
           <div class="watercolor-blob" style="width:300px;height:300px;background:#90cdf4;top:-10%;right:-15%"></div>
           <div class="watercolor-blob" style="width:250px;height:250px;background:#68d391;bottom:0;right:0"></div>
           <div class="watercolor-blob" style="width:180px;height:180px;background:#f6e05e;top:30%;right:20%"></div>
@@ -225,7 +225,7 @@ function buildPrompt(role, bio) {
   for (const [kw, s] of Object.entries(scenes)) {
     if (text.includes(kw)) { scene = s; break; }
   }
-  return `${scene}, delicate watercolor illustration, wet-on-wet technique, soft pigment bleeding, cold-press paper texture, 2-3 pastel colors blush pink sage green warm peach, pure white background, no text no borders, elegant business card art`;
+  return `${scene}, realistic proportions and faces, no distorted features, delicate watercolor illustration, wet-on-wet technique, soft pigment bleeding, cold-press paper texture, 2-3 pastel colors blush pink sage green warm peach, pure white background, no text no borders, elegant business card art`;
 }
 
 async function submitForm() {
